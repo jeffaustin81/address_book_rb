@@ -41,7 +41,7 @@ class Contact
   end
 
   def first_last
-    first_name + " " +last_name
+    first_name + " " + last_name
   end
 
   def last_first
@@ -53,6 +53,7 @@ class Contact
       last_first += middle_name.slice(0, 1)
       last_first += "."
     end
+    last_first
   end
 
   def full_name
