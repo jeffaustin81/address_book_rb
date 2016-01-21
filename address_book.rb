@@ -7,16 +7,8 @@ class AddressBook
     @contacts = []
   end
 
-  def find_by_name(name)
-    results = []
-    search = name.downcase
-    contacts.each do |contact|
-      if contact.first_name.downcase.include?(search) ||
-         contact.last_name.downcase.include?(search)
-        results.push(contact)
-      end
-    end
-    puts "Name search results (#{search})"
+  def print_results(search, results)
+    puts search
     results.each do |contact|
       puts contact.to_s('full_name')
       contact.print_phone_numbers
@@ -25,23 +17,28 @@ class AddressBook
     end
   end
 
-  def find_by_phone_number(number)
+  def find_by_name(name)
     results = []
-    search = number.delete('-')
+    search = name.downcase
     contacts.each do |contact|
-      contact.phone_numbers.each do |phone_number|
-        if phone_number.number.gsub("-", "").include?(search)
-          results.push(contact)
-        end
+      if contact.full_name.downcase.include?(search)
+        results.push(contact)
       end
     end
-    puts "Phone search results (#{search})"
-    results.each do |contact|
-      puts contact.to_s('full_name')
-      contact.print_phone_numbers
-      contact.print_addresses
-      puts "\n"
-    end
+    print_results("Name search results (#{search})", results)
+  end
+
+  def find_by_phone_number(number)
+    results = []
+    search = number.gsub("-", "")
+    contacts.each do |contact|
+      contact.phone_numbers.each do |phone_number|
+          if phone_number.number.gsub("-", "").include?(search)
+            results.push(contact) unless results.include?(contact)
+          end
+        end
+      end
+    print_results("Phone search results (#{search})", results)
   end
 
   def print_contact_list
@@ -51,7 +48,6 @@ class AddressBook
     end
   end
 end
-
 address_book = AddressBook.new
 
 jason = Contact.new
